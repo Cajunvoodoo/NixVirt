@@ -14,7 +14,7 @@
 
   outputs = { self, nixpkgs }:
     let
-      packages = import nixpkgs { system = "x86_64-linux"; };
+      packages = import nixpkgs { system = "aarch64-linux"; };
 
       nixvirtPythonModulePackage = packages.runCommand "nixvirtPythonModulePackage" { }
         ''
@@ -48,22 +48,22 @@
     {
       lib = mklib stuff;
 
-      apps.x86_64-linux.virtdeclare =
+      apps.aarch64-linux.virtdeclare =
         {
           type = "app";
           program = "${virtdeclareFile packages.libvirt}";
         };
 
       # for debugging
-      apps.x86_64-linux.nixvirt-module-helper =
+      apps.aarch64-linux.nixvirt-module-helper =
         {
           type = "app";
           program = "${moduleHelperFile packages.libvirt}";
         };
 
-      formatter.x86_64-linux = packages.nixpkgs-fmt;
+      formatter.aarch64-linux = packages.nixpkgs-fmt;
 
-      packages.x86_64-linux.default = packages.runCommand "NixVirt" { }
+      packages.aarch64-linux.default = packages.runCommand "NixVirt" { }
         ''
           mkdir -p $out/bin
           ln -s ${virtdeclareFile packages.libvirt} $out/bin/virtdeclare
@@ -73,6 +73,6 @@
 
       nixosModules.default = modules.nixosModule;
 
-      checks.x86_64-linux = import checks/checks.nix stuff mklib;
+      checks.aarch64-linux = import checks/checks.nix stuff mklib;
     };
 }
